@@ -1,0 +1,1 @@
+create database addresses_service;
