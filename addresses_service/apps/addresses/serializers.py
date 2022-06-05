@@ -1,10 +1,10 @@
 from django_countries.serializers import CountryFieldMixin
-from rest_framework import serializers
 
 from addresses_service.apps.addresses import models
+from addresses_service.apps.base.serializers import HalModelSerializer
 
 
-class AddressSerializer(CountryFieldMixin, serializers.ModelSerializer):
+class AddressSerializer(CountryFieldMixin, HalModelSerializer):
     class Meta:
         model = models.Address
         fields = (

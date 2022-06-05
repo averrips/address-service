@@ -112,14 +112,15 @@ class TestGetAddressesEndpoint:
         AddressFactory.create_batch(10, user=authenticated_client.token.user)
         resp = authenticated_client.get("/api/addresses")
         assert resp.status_code == 200, resp.json()
-        assert len(resp.json()["results"]) == 10
+        data = resp.json()
+        assert len(data["_embedded"]) == 10
 
     def test__get_addresses__only_own_addresses(self, authenticated_client):
         own_address = AddressFactory(user=authenticated_client.token.user)
         AddressFactory()  # Other address, from another user
         resp = authenticated_client.get("/api/addresses")
         assert resp.status_code == 200, resp.json()
-        assert [address["id"] for address in resp.json()["results"]] == [
+        assert [address["id"] for address in resp.json()["_embedded"]] == [
             str(own_address.pk)
         ]
 
@@ -139,6 +140,9 @@ class TestGetAddressEndpoint:
         assert resp.status_code == 200, resp.json()
         data = resp.json()
         assert data == {
+            "_links": {
+                "self": {"href": f'http://testserver/api/addresses/{data["id"]}'}
+            },
             "id": data["id"],
             "type": "M",
             "city": "Vanessaside",

@@ -7,6 +7,7 @@ from rest_framework import viewsets
 
 from .models import Address
 from .serializers import AddressSerializer
+from ..base.pagination import HalPageNumberPagination
 
 
 class AddressesViewSet(viewsets.ModelViewSet):
@@ -15,6 +16,7 @@ class AddressesViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Address.objects.all()
+    pagination_class = HalPageNumberPagination
     serializer_class = AddressSerializer
     authentication_classes = [OAuth2Authentication]
     permission_classes = [TokenMatchesOASRequirements]
